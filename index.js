@@ -5,15 +5,20 @@
 // node index.js
 // console.log('Hola Mundo NodeJs')
 // https://mongoosejs.com/
-// npm i mongoose
+// npm i mongoose    define esquemas con datos fuertemente tipados
 // Despues
-// npm i dotenv
+
+// npm i dotenv  configurar variables globales de entorno 
 // Despues de configurar variables globales
 // npm i cors
 
-// npm install -g nodemon
+// npm install -g nodemon  Revisa cada vez que se guarda un archivo
 // nodemon index.js
 // npm run start:dev
+
+// npm i express-validator    Valida los campos si es requerido o no, etc
+
+// npm i bcryptjs   Ayuda a cifrar contraseñas
 
 require('dotenv').config();
 
