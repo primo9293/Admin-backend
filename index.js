@@ -20,6 +20,8 @@
 
 // npm i bcryptjs   Ayuda a cifrar contraseñas
 
+//  npm i jsonwebtoken   Genera token para la app
+
 require('dotenv').config();
 
 const express = require('express');
@@ -43,6 +45,8 @@ dbConnection();
 
 // Rutas
 app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'));
+
 // req (request): lo que se solicita. res (response): Lo que repsonde el servidor
 /* app.get('/', (req, res) => {
     res.json({
