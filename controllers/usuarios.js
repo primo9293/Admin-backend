@@ -6,11 +6,35 @@ const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async(req, res) => {
 
-    const usuarios = await Usuario.find({}, 'nombre email google role');
+    // Paginación
+    const desde = Number(req.query.desde) || 0;
+    // console.log(desde);
+
+
+    // const usuarios = await Usuario.find({}, 'nombre email google role');
+    // Con paginación
+    /* Optimización con el Promise.All(), para que una no espere a la otra
+    const usuarios = await Usuario
+        .find({}, 'nombre email google role')
+        .skip(desde)
+        .limit(3);
+
+    const total = await Usuario.count();
+    */
+    // Lo que se quiere es optimizar la petición de esos llamados por eso se hace el Promise.All()
+    const [usuarios, total] = await Promise.all([
+        Usuario
+        .find({}, 'nombre email google role')
+        .skip(desde)
+        .limit(3),
+
+        Usuario.count()
+    ])
 
     res.json({
         ok: true,
         usuarios,
+        total
         // Retorno el uid del usuario que hizo la petición
         // uid: req.uid
     });
