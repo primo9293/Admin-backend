@@ -24,11 +24,12 @@ const getUsuarios = async(req, res) => {
     // Lo que se quiere es optimizar la petición de esos llamados por eso se hace el Promise.All()
     const [usuarios, total] = await Promise.all([
         Usuario
-        .find({}, 'nombre email google role')
+        .find({}, 'nombre email google role img')
         .skip(desde)
         .limit(3),
 
-        Usuario.count()
+        // Usuario.count()
+        Usuario.countDocuments()
     ])
 
     res.json({
