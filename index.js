@@ -24,6 +24,9 @@
 
 // npm i express-fileupload
 
+// Para integrar login con Google o ver url: https://developers.google.com/identity/sign-in/web/backend-auth
+// npm install google-auth-library --save
+
 require('dotenv').config();
 
 const express = require('express');
@@ -44,6 +47,9 @@ dbConnection();
 
 // Imprimir las variables globales de node y las personalizadas
 // console.log(process.env);
+
+// Directorio Público - Hacer que una ruta o un espacio sea publico
+app.use(express.static('public'));
 
 // Rutas
 app.use('/api/usuarios', require('./routes/usuarios'));
@@ -74,3 +80,11 @@ app.listen(process.env.PORT, () => {
 /* app.listen(3000, () => {
     console.log('Servidor arriba en el puerto ' + 3000);
 }); */
+
+/* 
+git add .
+git commit -m ''
+git tag
+git tag -a v0.0.0 -m ''
+git push --tags
+*/

@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
+const { googleVerify } = require('../helpers/google-verify');
 
 const login = async(req, res = response) => {
 
@@ -46,6 +47,82 @@ const login = async(req, res = response) => {
     }
 }
 
+const googleSignIn = async(req, res = response) => {
+
+    const googleToken = req.body.token;
+
+    try {
+
+        // Válido el token
+        const { name, email, picture } = await googleVerify(googleToken);
+
+        const usuarioDB = await Usuario.findOne({ email })
+        let usuario;
+        // Verificar si el email ya existe
+        if (!usuarioDB) {
+            // Si no existe el usuario
+            usuario = new Usuario({
+                nombre: name,
+                email,
+                password: '*Google*',
+                img: picture,
+                google: true
+            })
+        } else {
+            // existe el usuario
+            usuario = usuarioDB;
+            usuario.google = true;
+            // usuario.password = 'CambiarContraseña';
+        }
+
+        // Guardar en la BD
+        await usuario.save();
+
+        // Generar Token - JWT
+        const token = await generarJWT(usuario.id);
+
+        res.json({
+            ok: true,
+            msg: 'Google Signin Válido',
+            // googleToken
+            token,
+            name,
+            email,
+            picture
+        });
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: 'Token no válido'
+        });
+    }
+
+}
+
+const renewToken = async(req, res = response) => {
+
+    const uid = req.uid
+        // console.log(req);
+        // console.log(uid);
+
+
+    // Generar Token - JWT
+    const token = await generarJWT(uid);
+
+    // Obtener el usuario por UID
+    // const usuarioDB = await Usuario.findById({ _id: uid })
+    const usuarioDB = await Usuario.findById(uid);
+
+    res.json({
+        ok: true,
+        uid,
+        token,
+        usuarioDB
+    })
+}
+
 module.exports = {
-    login
+    login,
+    googleSignIn,
+    renewToken
 }
